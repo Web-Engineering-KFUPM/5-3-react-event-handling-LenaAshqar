@@ -3,18 +3,23 @@ import TaskList from "./TaskList";
 
 export default function TaskApp() {
   const [text, setText] = useState("");
+  const [tasks, setTasks] = useState([]);
 
   const handleSubmit = () => {
+      setTasks(tasks => [...tasks, {"id": Date.now(), "text": text}]);
+      setText("");
   };
 
   
   const handleDelete = (id) => {
     // TODO: filter tasks by id to remove the clicked one
+      setTasks(tasks => tasks.filter(t => t.id !== id));
   };
 
   
   const handleClearAll = () => {
     // TODO: set tasks to empty array
+    setTasks([])
   };
 
   return (
@@ -27,6 +32,8 @@ export default function TaskApp() {
           className="input"
           value = {text}
           onChange = {(e) => setText(e.target.value)}
+          onSubmit = {handleSubmit}
+          onDelete = {handleDelete}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSubmit();
           }}
@@ -39,7 +46,7 @@ export default function TaskApp() {
 
       {/*Render Task List and Enable Delete */}
       {/*Pass tasks and onDelete */}
-      <TaskList /* tasks={tasks} onDelete={handleDelete} */ />
+      <TaskList tasks={tasks} onDelete={handleDelete} />
 
       {/*Clear All */}
       <div className="footerRow">
